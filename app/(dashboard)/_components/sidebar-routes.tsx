@@ -20,13 +20,15 @@ const guestRoutes = [
 const SidebarRoutes = () => {
     const routes = guestRoutes;
     return ( 
-        <div  className="flex flex-col w-full">
+        <div  className="flex flex-col w-full mt-1">
             {routes.map((route, index) => (
+            
                 <SidebarItem
                     key={index}
                     icon={route.icon}
                     label={route.label}
                     path={route.path}
+                    
                 />
             ))}
         </div>
