@@ -25,24 +25,24 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
+import { Combobox } from "@/components/ui/combobox";
 
 const formSchema = z.object({
-  description: z.string().min(5, {
-    message: "Description should be at least 5 characters long ",
-  }),
+    categoryId: z.string().min(1),
 });
 
-interface DescriptionFormProps {
+interface CategotyFormProps {
   initialData: Course;
   courseId: string;
+  options: { label: string; value: string; }[];
 }
 
-export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+export const CategotyForm = ({ initialData, courseId, options }: CategotyFormProps) => {
     const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || "",
+      categoryId: initialData?.categoryId || "",
     },
   });
 
@@ -63,26 +63,28 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
     }
   };
 
+  const selectedOption = options.find((option) => option.value === initialData.categoryId);
+
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-center">
-        Course Description
+        Course Category
         <Button onClick={toggleEditing} variant={"ghost"}>
           {isediting ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit Description
+              Edit Category
             </>
           )}
         </Button>
       </div>
       {!isediting ? (
         <p className={
-            cn("text-sm mt-2", !initialData.description && "text-slate-500 italic")
+            cn("text-sm mt-2", !initialData.categoryId && "text-slate-500 italic")
         }>
-            {initialData.description || "No description provided"}
+            {selectedOption?.label || "No category"}
             </p>
       ) : (
         <Form {...form}>
@@ -92,14 +94,13 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
           >
             <FormField
               control={form.control}
-              name="description" 
+              name="categoryId" 
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'This course will teach you about ...'"
-                      {...field}
+                   <Combobox
+                    {...field}
+                    options={options}
                     />
                   </FormControl>
                 </FormItem>

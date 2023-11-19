@@ -1,9 +1,11 @@
 import { IconBadge } from "@/components/icon-badge";
 import { db } from "@/lib/db";
-import {LayoutList } from "lucide-react";
+import {CircleDollarSign, LayoutList, ListChecks } from "lucide-react";
 import { redirect } from "next/navigation";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
+import { ImageForm } from "./_components/image-form";
+import { CategotyForm } from "./_components/category-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
@@ -11,6 +13,13 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       id: params.courseId,
     },
   });
+
+  const catagories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
 
   if (!course) {
     return redirect("/");
@@ -54,7 +63,44 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <DescriptionForm
                 initialData = {course}
                 courseId = {course.id}
-              />       
+              />   
+              <ImageForm
+                initialData = {course}
+                courseId = {course.id}
+              />  
+              
+              <CategotyForm
+                initialData = {course}
+                courseId = {course.id}
+                options={catagories.map((category) =>
+                  ({
+                    label: category.name,
+                    value: category.id
+                  }))
+                  }
+              />  
+        </div>
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center gap-x-2">
+                  <IconBadge icon={ListChecks} />
+                  <h2 className="text-xl ">
+                    Course chapters
+                  </h2>
+            </div>
+          </div>
+          <div>
+            Todo: Chapters
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={CircleDollarSign} />
+              <h2 className="text-xl">
+                Sell your course
+              </h2>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
