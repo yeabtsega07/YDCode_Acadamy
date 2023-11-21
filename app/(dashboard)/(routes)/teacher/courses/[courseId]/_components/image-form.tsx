@@ -46,8 +46,8 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-center">
+    <div className="mt-6 border  bg-slate-100  dark:bg-slate-800  rounded-md p-4">
+      <div className="font-medium flex items-center justify-between">
         Course Image
         <Button onClick={toggleEditing} variant={"ghost"}>
           {isediting && <>Cancel</>}
@@ -68,8 +68,8 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
       </div>
       {!isediting &&
         (!initialData.imageUrl ? (
-          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <ImageIcon className="h-10 w-10 text-slate-500" />
+          <div className="flex items-center justify-center  h-60 bg-slate-200  dark:bg-slate-600  rounded-md">
+            <ImageIcon className="h-10 w-10 text-slate-500  dark:text-slate-200 " />
           </div>
         ) : (
           <div className="relative aspect-video mt-2">

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { ModeToggle } from "./ui/themeToggle";
 
 const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -29,6 +30,7 @@ const NavbarRoutes = () => {
           </Button>
         </Link>
       )}
+      <ModeToggle/>
       <UserButton afterSignOutUrl="/" />
     </div>
   );
