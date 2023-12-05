@@ -7,6 +7,9 @@ import { redirect } from "next/navigation";
 import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
+import { ChapterVideoForm } from "./_components/chapter-video-form";
+import { Banner } from "@/components/banner";
+import { ChapterActions } from "./_components/chapter-actions";
 
 const ChapterIdPage = async ({
   params,
@@ -42,14 +45,23 @@ const ChapterIdPage = async ({
 
   const completedText = `(${completedFeilds}/${totalFeilds})`;
 
+  const isComplete = requiredFeilds.every(Boolean);
+
   return (
+    <>
+    {!chapter.isPublished && (
+      <Banner
+        variant={"warning"}
+        label="This chapter is not published yet. It will not be visible in the course."
+      />
+    )}
     <div className="p-6">
       <div className="flex items-center justify-between">
         <div className="w-full">
           <Link
             href={`/teacher/courses/${params.courseId}`}
             className="flex items-center text-sm hover:opacity-75 transition mb-6"
-          >
+            >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to course setup
           </Link>
@@ -61,6 +73,12 @@ const ChapterIdPage = async ({
                 Complete your chapter setup {completedText}
               </span>
             </div>
+            <ChapterActions
+              disabled = {!isComplete}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+              isPublished={chapter.isPublished}
+            />
           </div>
         </div>
       </div>
@@ -83,7 +101,7 @@ const ChapterIdPage = async ({
                   initialData={chapter}
                   courseId={params.courseId}
                   chapterId={params.chapterId}
-                />
+                  />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
@@ -96,7 +114,7 @@ const ChapterIdPage = async ({
                   initialData={chapter}
                   courseId={params.courseId}
                   chapterId={params.chapterId}
-                />
+                  />
             </div>
         </div>
         <div>
@@ -108,10 +126,16 @@ const ChapterIdPage = async ({
             </h2>
 
           </div>
+          <ChapterVideoForm
+            initialData={chapter}
+            courseId={params.courseId}
+            chapterId={params.chapterId}
+            />
         </div>
 
       </div>
     </div>
+  </>
   );
 };
 
